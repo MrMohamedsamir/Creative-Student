@@ -6,9 +6,9 @@
     <title>استمارة تسجيل الطلاب - أ/ محمد سمير</title>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Font Awesome للأيقونات -->
+    <!-- Font Awesome الأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- خط Cairo الاحترافي -->
+    <!-- خط Cairo -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -19,68 +19,78 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+            background-color: #0b0f19;
+            background-image: radial-gradient(circle at 50% 0%, #111d2e 0%, #0b0f19 75%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            color: #ffffff;
         }
 
         .card {
-            background: #ffffff;
+            background: #111827;
             width: 100%;
             max-width: 520px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(6, 182, 212, 0.15);
             overflow: hidden;
             position: relative;
         }
 
         .header {
-            background: linear-gradient(135deg, #00b4db, #0083b0);
-            padding: 30px 20px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            padding: 30px 20px 20px 20px;
             text-align: center;
-            color: white;
-            position: relative;
+            border-bottom: 2px solid #06b6d4;
         }
 
-        /* الصورة الشخصية للمدرس في الهيدر */
         .teacher-img {
-            width: 100px;
-            height: 100px;
+            width: 105px;
+            height: 105px;
             border-radius: 50%;
-            border: 4px solid #ffffff;
+            border: 3px solid #06b6d4;
             object-fit: cover;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 25px;
             font-weight: 900;
-            margin-bottom: 5px;
+            color: #06b6d4;
+            margin-bottom: 4px;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
         }
 
         .header p {
             font-size: 14px;
-            opacity: 0.95;
-            font-weight: 700;
+            color: #9ca3af;
+            font-weight: 600;
         }
 
         .phone-contact {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 6px 16px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid #06b6d4;
+            padding: 6px 18px;
             border-radius: 50px;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 14px;
             font-weight: 800;
-            color: #fff;
+            color: #06b6d4;
             text-decoration: none;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .phone-contact:hover {
+            background: #06b6d4;
+            color: #111827;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
         }
 
         form {
@@ -88,32 +98,42 @@
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
             font-weight: 700;
-            margin-bottom: 6px;
-            color: #1e293b;
+            margin-bottom: 8px;
+            color: #e5e7eb;
             font-size: 14px;
         }
 
         input, select {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            background-color: #1f2937;
+            border: 1.5px solid #374151;
+            border-radius: 10px;
             font-size: 14px;
+            color: #ffffff;
             transition: all 0.3s ease;
             outline: none;
-            background-color: #f8fafc;
+        }
+
+        input::placeholder {
+            color: #6b7280;
         }
 
         input:focus, select:focus {
-            border-color: #0083b0;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(0, 131, 176, 0.15);
+            border-color: #06b6d4;
+            background-color: #111827;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        select option {
+            background-color: #1f2937;
+            color: #ffffff;
         }
 
         .form-row {
@@ -128,28 +148,30 @@
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #00b4db, #0083b0);
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
             border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 17px;
-            font-weight: 800;
+            border-radius: 10px;
+            color: #0f172a;
+            font-size: 18px;
+            font-weight: 900;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 131, 176, 0.35);
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
             transition: all 0.3s ease;
             margin-top: 10px;
         }
 
         button:hover {
+            background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 131, 176, 0.45);
         }
 
         button:disabled {
-            background: #94a3b8;
+            background: #4b5563;
+            color: #9ca3af;
             cursor: not-allowed;
-            transform: none;
             box-shadow: none;
+            transform: none;
         }
 
         .alert {
@@ -163,36 +185,41 @@
         }
 
         .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid #10b981;
         }
 
         .alert-error {
-            background-color: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #ef4444;
         }
 
-        /* حاوية صورة المواعيد عند نجاح التسجيل */
         #scheduleContainer {
             display: none;
             padding: 20px;
             text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
+            border-top: 1px solid #374151;
+            background: #0f172a;
+        }
+
+        #scheduleContainer h3 {
+            color: #06b6d4;
+            margin-bottom: 8px;
+        }
+
+        #scheduleContainer p {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 12px;
         }
 
         #scheduleContainer img {
             width: 100%;
-            max-width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-            margin-top: 10px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            border-radius: 10px;
+            border: 2px solid #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
         }
 
         @media (max-width: 480px) {
@@ -207,10 +234,10 @@
 
 <div class="card">
     <div class="header">
-        <!-- الصورة الشخصية للمدرس المرفوعة على repository على GitHub -->
-        <img src="teacher.jpg" alt="أستاذ محمد سمير" class="teacher-img" onerror="this.style.display='none'">
+        <!-- تم ضبط اسم الصورة هنا ليتطابق مع اسم "الصورة" على جيت هاب -->
+        <img src="الصورة.jpg" alt="أستاذ محمد سمير" class="teacher-img">
         <h1>أ / محمد سمير</h1>
-        <p>استمارة تسجيل الطلاب - منصة Creative Student</p>
+        <p>منصة Creative Student التعليمية</p>
         <a href="tel:01024417434" class="phone-contact">
             <i class="fa-solid fa-phone"></i> 01024417434
         </a>
@@ -251,9 +278,9 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>اختر المجموعة *</label>
+                <label>اختر أيام المجموعة *</label>
                 <select id="group_name" required>
-                    <option value="">اختر المجموعة</option>
+                    <option value="">اختر أيام المجموعة</option>
                     <option value="مجموعة 1 (السبت والثلاثاء)">مجموعة 1 (السبت والثلاثاء)</option>
                     <option value="مجموعة 2 (الأحد والأربعاء)">مجموعة 2 (الأحد والأربعاء)</option>
                     <option value="مجموعة 3 (الإثنين والخميس)">مجموعة 3 (الإثنين والخميس)</option>
@@ -261,14 +288,33 @@
             </div>
         </div>
 
+        <div class="form-row">
+            <div class="form-group">
+                <label>الفترة الدراسية *</label>
+                <select id="period_type" required>
+                    <option value="">اختر الفترة</option>
+                    <option value="صباحي">صباحي</option>
+                    <option value="مسائي">مسائي</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>مقر المجموعة *</label>
+                <select id="location_group" required>
+                    <option value="">اختر المقر</option>
+                    <option value="مجموعة فوه">مجموعة فوه</option>
+                    <option value="مجموعة العلوي">مجموعة العلوي</option>
+                </select>
+            </div>
+        </div>
+
         <button type="submit" id="submitBtn">تأكيد وتسجيل البيانات 🚀</button>
     </form>
 
-    <!-- قسم صورة المواعيد والجدول ظهر بعد التسجيل مباشرة -->
     <div id="scheduleContainer">
-        <h3 style="color: #0083b0; margin-bottom: 10px;">🗓️ جدول المواعيد المتاحة</h3>
-        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">يرجى الاحتفاظ بصورة الجدول أو التقاط لقطة شاشة (Screenshot)</p>
-        <img src="schedule.jpg" alt="جدول المواعيد" onerror="this.src='schedule.png'">
+        <h3>🗓️ جدول المواعيد المتاحة</h3>
+        <p>يرجى حفظ صورة الجدول أو التقاط لقطة شاشة (Screenshot)</p>
+        <!-- تم ضبط اسم صورة الجدول هنا ليتطابق مع اسم "المواعيد" على جيت هاب -->
+        <img src="المواعيد.jpg" alt="جدول المواعيد">
     </div>
 </div>
 
@@ -290,12 +336,16 @@
         submitBtn.innerText = 'جاري التسجيل وإرسال البيانات...';
         alertBox.style.display = 'none';
 
+        const period = document.getElementById('period_type').value;
+        const location = document.getElementById('location_group').value;
+
         const studentData = {
             full_name: document.getElementById('full_name').value.trim(),
             student_phone: document.getElementById('student_phone').value.trim(),
             parent_phone: document.getElementById('parent_phone').value.trim(),
             grade: document.getElementById('grade').value,
-            group_name: document.getElementById('group_name').value
+            group_name: document.getElementById('group_name').value,
+            notes: `المقر: ${location} | الفترة: ${period}`
         };
 
         try {
@@ -308,7 +358,6 @@
             showAlert('تم تسجيل البيانات بنجاح! 🎉 نتمنى لك التوفيق.', 'success');
             form.reset();
             
-            // إظهار جدول المواعيد بعد نجاح التسجيل
             scheduleContainer.style.display = 'block';
             scheduleContainer.scrollIntoView({ behavior: 'smooth' });
 
