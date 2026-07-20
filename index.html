@@ -216,6 +216,30 @@
       border: 1px solid #f44336;
     }
 
+    /* قسم جدول المواعيد بعد التسجيل */
+    .schedule-container {
+      display: none;
+      margin-top: 25px;
+      text-align: center;
+      border-top: 2px dashed var(--primary);
+      padding-top: 20px;
+    }
+
+    .schedule-container h3 {
+      color: var(--primary);
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .schedule-img {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 15px;
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+    }
+
     .footer-note {
       text-align: center;
       margin-top: 20px;
@@ -228,7 +252,7 @@
 
   <div class="container">
     <div class="teacher-profile">
-      <img src="https://i.ibb.co/6P0jHkW/55760.png" alt="مستر محمد سمير" class="teacher-avatar">
+      <img src="https://i.postimg.cc/mD8NscWf/55760.png" alt="مستر محمد سمير" class="teacher-avatar">
       <h1>منصة CREATIVE STUDENT</h1>
       <p>مستر محمد سمير - رياضيات</p>
       <a href="tel:01024417434" class="teacher-phone">
@@ -350,6 +374,12 @@
       <div id="alertBox" class="alert"></div>
     </form>
 
+    <!-- مكان ظهور صورة المواعيد بعد نجاح التسجيل -->
+    <div id="scheduleContainer" class="schedule-container">
+      <h3>📅 جدول المواعيد الرسمي (2026 / 2027)</h3>
+      <img src="https://i.postimg.cc/qRHcKg3j/73621.png" alt="جدول مواعيد دروس الرياضيات" class="schedule-img">
+    </div>
+
     <div class="footer-note">
       <i class="fa-solid fa-lock"></i> بياناتك آمنة ولن يتم مشاركتها مع أي جهة أخرى
     </div>
@@ -365,6 +395,7 @@
     const form = document.getElementById('studentForm');
     const submitBtn = document.getElementById('submitBtn');
     const alertBox = document.getElementById('alertBox');
+    const scheduleContainer = document.getElementById('scheduleContainer');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -393,9 +424,15 @@
         if (error) throw error;
 
         alertBox.className = 'alert alert-success';
-        alertBox.innerText = 'تم تسجيل البيانات بنجاح! مرحباً بك في المنصة.';
+        alertBox.innerText = 'تم تسجيل البيانات بنجاح! يمكنك الاطلاع على جدول المواعيد بالأسفل:';
         alertBox.style.display = 'block';
+        
+        // إظهار صورة المواعيد وتفريغ الحقول
+        scheduleContainer.style.display = 'block';
         form.reset();
+
+        // التمرير الناعم لأسفل لرؤية المواعيد
+        scheduleContainer.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
         alertBox.className = 'alert alert-error';
