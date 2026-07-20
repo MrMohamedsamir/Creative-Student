@@ -3,147 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الطلاب - Creative Student</title>
-    <!-- Supabase JS Client -->
+    <title>استمارة تسجيل الطلاب - أ/ محمد سمير</title>
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- خط Cairo الاحترافي -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
         }
-        .container {
+
+        .card {
             background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
         }
-        h2 {
+
+        .header {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            padding: 30px 20px;
             text-align: center;
-            color: #333;
-            margin-bottom: 25px;
+            color: white;
+            position: relative;
         }
+
+        /* الصورة الشخصية للمدرس في الهيدر */
+        .teacher-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 700;
+        }
+
+        .phone-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            backdrop-filter: blur(5px);
+        }
+
+        form {
+            padding: 25px;
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
+
         label {
             display: block;
+            font-weight: 700;
             margin-bottom: 6px;
-            color: #555;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
+            color: #1e293b;
             font-size: 14px;
         }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: #f8fafc;
+        }
+
+        input:focus, select:focus {
+            border-color: #0083b0;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 131, 176, 0.15);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #28a745;
+            padding: 14px;
+            background: linear-gradient(135deg, #00b4db, #0083b0);
             border: none;
+            border-radius: 12px;
             color: white;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 800;
             cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 131, 176, 0.35);
+            transition: all 0.3s ease;
             margin-top: 10px;
-            transition: background 0.3s;
         }
+
         button:hover {
-            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 131, 176, 0.45);
         }
-        .message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 6px;
-            display: none;
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 700;
             text-align: center;
-            font-weight: bold;
+            font-size: 14px;
+            display: none;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* حاوية صورة المواعيد عند نجاح التسجيل */
+        #scheduleContainer {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #scheduleContainer img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>استمارة تسجيل الطالب</h2>
+<div class="card">
+    <div class="header">
+        <!-- الصورة الشخصية للمدرس المرفوعة على repository على GitHub -->
+        <img src="teacher.jpg" alt="أستاذ محمد سمير" class="teacher-img" onerror="this.style.display='none'">
+        <h1>أ / محمد سمير</h1>
+        <p>استمارة تسجيل الطلاب - منصة Creative Student</p>
+        <a href="tel:01024417434" class="phone-contact">
+            <i class="fa-solid fa-phone"></i> 01024417434
+        </a>
+    </div>
+
     <form id="studentForm">
-        <div class="form-group">
-            <label>اسم الطالب رباعي:</label>
-            <input type="text" id="full_name" required placeholder="أدخل اسمك الكامل">
-        </div>
+        <div id="alertBox" class="alert"></div>
 
         <div class="form-group">
-            <label>رقم هاتف الطالب:</label>
-            <input type="tel" id="student_phone" required placeholder="01xxxxxxxxx">
+            <label>اسم الطالب رباعي *</label>
+            <input type="text" id="full_name" required placeholder="أدخل اسم الطالب الكامل">
         </div>
 
-        <div class="form-group">
-            <label>رقم هاتف ولي الأمر:</label>
-            <input type="tel" id="parent_phone" required placeholder="01xxxxxxxxx">
+        <div class="form-row">
+            <div class="form-group">
+                <label>رقم هاتف الطالب *</label>
+                <input type="tel" id="student_phone" required placeholder="01xxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label>رقم ولي الأمر *</label>
+                <input type="tel" id="parent_phone" required placeholder="01xxxxxxxxx">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>الصف الدراسي:</label>
-            <select id="grade" required>
-                <option value="">اختر الصف الدراسي</option>
-                <option value="الأول الثانوي">الأول الثانوي</option>
-                <option value="الثاني الثانوي">الثاني الثانوي</option>
-                <option value="الثالث الثانوي">الثالث الثانوي</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group">
+                <label>الصف الدراسي *</label>
+                <select id="grade" required>
+                    <option value="">اختر الصف الدراسي</option>
+                    <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                    <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                    <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                    <option value="الصف الأول الاعدادي بنين">الصف الأول الاعدادي بنين</option>
+                    <option value="الصف الأول الاعدادي بنات">الصف الأول الاعدادي بنات</option>
+                    <option value="الصف الثاني الاعدادي بنين">الصف الثاني الاعدادي بنين</option>
+                    <option value="الصف الثاني الاعدادي بنات">الصف الثاني الاعدادي بنات</option>
+                    <option value="الصف الثالث الاعدادي">الصف الثالث الاعدادي</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>اختر المجموعة *</label>
+                <select id="group_name" required>
+                    <option value="">اختر المجموعة</option>
+                    <option value="مجموعة 1 (السبت والثلاثاء)">مجموعة 1 (السبت والثلاثاء)</option>
+                    <option value="مجموعة 2 (الأحد والأربعاء)">مجموعة 2 (الأحد والأربعاء)</option>
+                    <option value="مجموعة 3 (الإثنين والخميس)">مجموعة 3 (الإثنين والخميس)</option>
+                </select>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>اسم المجموعة:</label>
-            <input type="text" id="group_name" required placeholder="مثال: مجموعة A">
-        </div>
-
-        <div class="form-group">
-            <label>الموعد / الفترة:</label>
-            <input type="text" id="period" required placeholder="مثال: السبت والإثنين 4 عصراً">
-        </div>
-
-        <div class="form-group">
-            <label>المدينة / المركز:</label>
-            <input type="text" id="city" required placeholder="أدخل مدينتك">
-        </div>
-
-        <div class="form-group">
-            <label>المدرسة (اختياري):</label>
-            <input type="text" id="school" placeholder="أدخل اسم مدرستك">
-        </div>
-
-        <div class="form-group">
-            <label>ملاحظات (اختياري):</label>
-            <textarea id="notes" rows="3" placeholder="أي ملاحظات إضافية"></textarea>
-        </div>
-
-        <button type="submit" id="submitBtn">تسجيل البيانات</button>
+        <button type="submit" id="submitBtn">تأكيد وتسجيل البيانات 🚀</button>
     </form>
 
-    <div id="statusMessage" class="message"></div>
+    <!-- قسم صورة المواعيد والجدول ظهر بعد التسجيل مباشرة -->
+    <div id="scheduleContainer">
+        <h3 style="color: #0083b0; margin-bottom: 10px;">🗓️ جدول المواعيد المتاحة</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">يرجى الاحتفاظ بصورة الجدول أو التقاط لقطة شاشة (Screenshot)</p>
+        <img src="schedule.jpg" alt="جدول المواعيد" onerror="this.src='schedule.png'">
+    </div>
 </div>
 
 <script>
-    // إعدادات الاتصال بـ Supabase
     const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
 
@@ -151,25 +280,22 @@
 
     const form = document.getElementById('studentForm');
     const submitBtn = document.getElementById('submitBtn');
-    const statusMessage = document.getElementById('statusMessage');
+    const alertBox = document.getElementById('alertBox');
+    const scheduleContainer = document.getElementById('scheduleContainer');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         submitBtn.disabled = true;
-        submitBtn.innerText = 'جاري الإرسال...';
-        statusMessage.style.display = 'none';
+        submitBtn.innerText = 'جاري التسجيل وإرسال البيانات...';
+        alertBox.style.display = 'none';
 
         const studentData = {
-            full_name: document.getElementById('full_name').value,
-            student_phone: document.getElementById('student_phone').value,
-            parent_phone: document.getElementById('parent_phone').value,
+            full_name: document.getElementById('full_name').value.trim(),
+            student_phone: document.getElementById('student_phone').value.trim(),
+            parent_phone: document.getElementById('parent_phone').value.trim(),
             grade: document.getElementById('grade').value,
-            group_name: document.getElementById('group_name').value,
-            period: document.getElementById('period').value,
-            city: document.getElementById('city').value,
-            school: document.getElementById('school').value || null,
-            notes: document.getElementById('notes').value || null
+            group_name: document.getElementById('group_name').value
         };
 
         try {
@@ -179,20 +305,27 @@
 
             if (error) throw error;
 
-            statusMessage.className = 'message success';
-            statusMessage.innerText = 'تم تسجيل البيانات بنجاح! 🎉';
-            statusMessage.style.display = 'block';
+            showAlert('تم تسجيل البيانات بنجاح! 🎉 نتمنى لك التوفيق.', 'success');
             form.reset();
+            
+            // إظهار جدول المواعيد بعد نجاح التسجيل
+            scheduleContainer.style.display = 'block';
+            scheduleContainer.scrollIntoView({ behavior: 'smooth' });
+
         } catch (error) {
             console.error('Error:', error);
-            statusMessage.className = 'message error';
-            statusMessage.innerText = 'حدث خطأ أثناء التسجيل: ' + error.message;
-            statusMessage.style.display = 'block';
+            showAlert('حدث خطأ أثناء التسجيل: ' + (error.message || 'يرجى إعادة المحاولة'), 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'تسجيل البيانات';
+            submitBtn.innerText = 'تأكيد وتسجيل البيانات 🚀';
         }
     });
+
+    function showAlert(message, type) {
+        alertBox.innerText = message;
+        alertBox.className = 'alert alert-' + type;
+        alertBox.style.display = 'block';
+    }
 </script>
 
 </body>
