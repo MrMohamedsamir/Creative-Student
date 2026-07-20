@@ -50,24 +50,51 @@
       border: 1px solid var(--border-color);
     }
 
-    .header-section {
+    .teacher-profile {
       text-align: center;
       margin-bottom: 25px;
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 20px;
     }
 
-    .header-section h1 {
+    .teacher-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 3px solid var(--primary);
+      margin-bottom: 15px;
+      box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+    }
+
+    .teacher-profile h1 {
       color: var(--primary);
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 900;
       letter-spacing: 1px;
     }
 
-    .header-section p {
+    .teacher-profile p {
       color: var(--text-muted);
       font-size: 16px;
       margin-top: 5px;
+    }
+
+    .teacher-phone {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--input-bg);
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      direction: ltr;
     }
 
     .form-title {
@@ -200,9 +227,13 @@
 <body>
 
   <div class="container">
-    <div class="header-section">
+    <div class="teacher-profile">
+      <img src="https://i.ibb.co/6P0jHkW/55760.png" alt="مستر محمد سمير" class="teacher-avatar">
       <h1>منصة CREATIVE STUDENT</h1>
       <p>مستر محمد سمير - رياضيات</p>
+      <a href="tel:01024417434" class="teacher-phone">
+        <i class="fa-solid fa-phone"></i> 01024417434
+      </a>
     </div>
 
     <div class="form-title">تسجيل بيانات الطالب</div>
@@ -243,10 +274,15 @@
           <div class="input-wrapper">
             <i class="fa-solid fa-graduation-cap"></i>
             <select id="grade" required>
-              <option value="">اختر الصف</option>
-              <option value="الأول الثانوي">الأول الثانوي</option>
-              <option value="الثاني الثانوي">الثاني الثانوي</option>
-              <option value="الثالث الثانوي">الثالث الثانوي</option>
+              <option value="">اختر الصف الدراسي</option>
+              <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+              <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+              <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+              <option value="الصف الأول الإعدادي بنين">الصف الأول الإعدادي بنين</option>
+              <option value="الصف الأول الإعدادي بنات">الصف الأول الإعدادي بنات</option>
+              <option value="الصف الثاني الإعدادي بنين">الصف الثاني الإعدادي بنين</option>
+              <option value="الصف الثاني الإعدادي بنات">الصف الثاني الإعدادي بنات</option>
+              <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
             </select>
           </div>
         </div>
@@ -258,18 +294,35 @@
             <i class="fa-solid fa-users"></i>
             <select id="group_name" required>
               <option value="">اختر المجموعة</option>
-              <option value="مجموعة 1 (السبت والأربعاء)">مجموعة 1 (السبت والأربعاء)</option>
-              <option value="مجموعة 2 (الأحد والثلاثاء)">مجموعة 2 (الأحد والثلاثاء)</option>
+              <option value="مجموعة 1 السبت والثلاثاء">مجموعة 1 السبت والثلاثاء</option>
+              <option value="مجموعة 2 الأحد والأربعاء">مجموعة 2 الأحد والأربعاء</option>
             </select>
           </div>
         </div>
 
-        <!-- تاريخ الميلاد -->
+        <!-- الفترة -->
         <div class="form-group">
-          <label>تاريخ الميلاد *</label>
+          <label>الفترة *</label>
           <div class="input-wrapper">
-            <i class="fa-solid fa-calendar-days"></i>
-            <input type="date" id="birth_date" required>
+            <i class="fa-solid fa-clock"></i>
+            <select id="period" required>
+              <option value="">اختر الفترة</option>
+              <option value="صباحي">صباحي</option>
+              <option value="مسائي">مسائي</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- المنطقة / المدينة -->
+        <div class="form-group">
+          <label>المجموعة / المكان *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-location-dot"></i>
+            <select id="city" required>
+              <option value="">اختر المكان</option>
+              <option value="مجموعة فوة">مجموعة فوة</option>
+              <option value="مجموعة العلوي">مجموعة العلوي</option>
+            </select>
           </div>
         </div>
 
@@ -279,15 +332,6 @@
           <div class="input-wrapper">
             <i class="fa-solid fa-school"></i>
             <input type="text" id="school" placeholder="اكتب اسم المدرسة">
-          </div>
-        </div>
-
-        <!-- المنطقة / المدينة -->
-        <div class="form-group">
-          <label>المنطقة / المدينة</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-location-dot"></i>
-            <input type="text" id="city" placeholder="اكتب منطقتك / مدينتك">
           </div>
         </div>
 
@@ -335,9 +379,9 @@
         parent_phone: document.getElementById('parent_phone').value,
         grade: document.getElementById('grade').value,
         group_name: document.getElementById('group_name').value,
-        birth_date: document.getElementById('birth_date').value,
-        school: document.getElementById('school').value,
+        period: document.getElementById('period').value,
         city: document.getElementById('city').value,
+        school: document.getElementById('school').value,
         notes: document.getElementById('notes').value
       };
 
