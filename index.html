@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Student | مستر محمد سمير</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --primary: #00bcd4; /* تركواز */
+      --primary-dark: #00acc1;
+      --bg-dark: #121212; /* أسود */
+      --card-bg: #1e1e1e; /* أسود للبطاقات */
+      --input-bg: #2a2a2a;
+      --text-main: #ffffff;
+      --text-muted: #b0bec5;
+      --border-color: #333333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 188, 212, 0.1);
+      padding: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    .header-section h1 {
+      color: var(--primary);
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .header-section p {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-top: 5px;
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 20px 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      right: 14px;
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 42px 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      background-color: var(--input-bg);
+      color: var(--text-main);
+    }
+
+    textarea {
+      padding-right: 15px;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(0, 188, 212, 0.25);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background-color: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+    }
+
+    .btn-submit:disabled {
+      background-color: #555;
+      color: #888;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .alert {
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 700;
+      display: none;
+    }
+
+    .alert-success {
+      background-color: rgba(76, 175, 80, 0.15);
+      color: #4caf50;
+      border: 1px solid #4caf50;
+    }
+
+    .alert-error {
+      background-color: rgba(244, 67, 54, 0.15);
+      color: #f44336;
+      border: 1px solid #f44336;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <h1>منصة CREATIVE STUDENT</h1>
+      <p>مستر محمد سمير - رياضيات</p>
+    </div>
+
+    <div class="form-title">تسجيل بيانات الطالب</div>
+
+    <form id="studentForm">
+      <div class="form-grid">
+        
+        <!-- اسم الطالب -->
+        <div class="form-group">
+          <label>اسم الطالب رباعي *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="full_name" placeholder="اكتب اسم الطالب رباعي" required>
+          </div>
+        </div>
+
+        <!-- رقم الهاتف -->
+        <div class="form-group">
+          <label>رقم الهاتف (الطالب) *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" id="student_phone" placeholder="01xxxxxxxxx" required>
+          </div>
+        </div>
+
+        <!-- رقم ولي الأمر -->
+        <div class="form-group">
+          <label>رقم ولي الأمر *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <input type="tel" id="parent_phone" placeholder="01xxxxxxxxx" required>
+          </div>
+        </div>
+
+        <!-- الصف الدراسي -->
+        <div class="form-group">
+          <label>الصف الدراسي *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <select id="grade" required>
+              <option value="">اختر الصف</option>
+              <option value="الأول الثانوي">الأول الثانوي</option>
+              <option value="الثاني الثانوي">الثاني الثانوي</option>
+              <option value="الثالث الثانوي">الثالث الثانوي</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- المجموعة -->
+        <div class="form-group">
+          <label>المجموعة *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-users"></i>
+            <select id="group_name" required>
+              <option value="">اختر المجموعة</option>
+              <option value="مجموعة 1 (السبت والأربعاء)">مجموعة 1 (السبت والأربعاء)</option>
+              <option value="مجموعة 2 (الأحد والثلاثاء)">مجموعة 2 (الأحد والثلاثاء)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- تاريخ الميلاد -->
+        <div class="form-group">
+          <label>تاريخ الميلاد *</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-calendar-days"></i>
+            <input type="date" id="birth_date" required>
+          </div>
+        </div>
+
+        <!-- المدرسة -->
+        <div class="form-group">
+          <label>المدرسة</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-school"></i>
+            <input type="text" id="school" placeholder="اكتب اسم المدرسة">
+          </div>
+        </div>
+
+        <!-- المنطقة / المدينة -->
+        <div class="form-group">
+          <label>المنطقة / المدينة</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" id="city" placeholder="اكتب منطقتك / مدينتك">
+          </div>
+        </div>
+
+        <!-- ملاحظات -->
+        <div class="form-group full-width">
+          <label>ملاحظات (اختياري)</label>
+          <textarea id="notes" placeholder="اكتب أي ملاحظات إضافية"></textarea>
+        </div>
+
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <i class="fa-solid fa-paper-plane"></i> إرسال البيانات
+      </button>
+
+      <div id="alertBox" class="alert"></div>
+    </form>
+
+    <div class="footer-note">
+      <i class="fa-solid fa-lock"></i> بياناتك آمنة ولن يتم مشاركتها مع أي جهة أخرى
+    </div>
+  </div>
+
+  <script>
+    // بيانات الربط الخاصة بمشروعك
+    const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('studentForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const alertBox = document.getElementById('alertBox');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...';
+      alertBox.style.display = 'none';
+
+      const formData = {
+        full_name: document.getElementById('full_name').value,
+        student_phone: document.getElementById('student_phone').value,
+        parent_phone: document.getElementById('parent_phone').value,
+        grade: document.getElementById('grade').value,
+        group_name: document.getElementById('group_name').value,
+        birth_date: document.getElementById('birth_date').value,
+        school: document.getElementById('school').value,
+        city: document.getElementById('city').value,
+        notes: document.getElementById('notes').value
+      };
+
+      try {
+        const { data, error } = await supabase
+          .from('students')
+          .insert([formData]);
+
+        if (error) throw error;
+
+        alertBox.className = 'alert alert-success';
+        alertBox.innerText = 'تم تسجيل البيانات بنجاح! مرحباً بك في المنصة.';
+        alertBox.style.display = 'block';
+        form.reset();
+
+      } catch (err) {
+        alertBox.className = 'alert alert-error';
+        alertBox.innerText = 'حدث خطأ أثناء حفظ البيانات: ' + err.message;
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال البيانات';
+      }
+    });
+  </script>
+</body>
+</html>
