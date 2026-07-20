@@ -1,436 +1,199 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Creative Student | مستر محمد سمير</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Supabase JS Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root {
-      --primary: #00bcd4; /* تركواز */
-      --primary-dark: #00acc1;
-      --bg-dark: #121212; /* أسود */
-      --card-bg: #1e1e1e; /* أسود للبطاقات */
-      --input-bg: #2a2a2a;
-      --text-main: #ffffff;
-      --text-muted: #b0bec5;
-      --border-color: #333333;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 800px;
-      background: var(--card-bg);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 188, 212, 0.1);
-      padding: 30px;
-      border: 1px solid var(--border-color);
-    }
-
-    .teacher-profile {
-      text-align: center;
-      margin-bottom: 25px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 20px;
-    }
-
-    .teacher-avatar {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: top;
-      border: 3px solid var(--primary);
-      margin-bottom: 15px;
-      box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
-    }
-
-    .teacher-profile h1 {
-      color: var(--primary);
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .teacher-profile p {
-      color: var(--text-muted);
-      font-size: 16px;
-      margin-top: 5px;
-    }
-
-    .teacher-phone {
-      margin-top: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: var(--input-bg);
-      padding: 8px 20px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 16px;
-      text-decoration: none;
-      direction: ltr;
-    }
-
-    .form-title {
-      text-align: center;
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--primary);
-      margin: 20px 0;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 18px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group.full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-main);
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper i {
-      position: absolute;
-      right: 14px;
-      color: var(--primary);
-      font-size: 16px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px 42px 12px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.3s ease;
-      background-color: var(--input-bg);
-      color: var(--text-main);
-    }
-
-    textarea {
-      padding-right: 15px;
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(0, 188, 212, 0.25);
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 15px;
-      background-color: var(--primary);
-      color: #000;
-      border: none;
-      border-radius: 30px;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-submit:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
-    }
-
-    .btn-submit:disabled {
-      background-color: #555;
-      color: #888;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .alert {
-      padding: 14px;
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: center;
-      font-weight: 700;
-      display: none;
-    }
-
-    .alert-success {
-      background-color: rgba(76, 175, 80, 0.15);
-      color: #4caf50;
-      border: 1px solid #4caf50;
-    }
-
-    .alert-error {
-      background-color: rgba(244, 67, 54, 0.15);
-      color: #f44336;
-      border: 1px solid #f44336;
-    }
-
-    .schedule-container {
-      display: none;
-      margin-top: 25px;
-      text-align: center;
-      border-top: 2px dashed var(--primary);
-      padding-top: 20px;
-    }
-
-    .schedule-container h3 {
-      color: var(--primary);
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: 800;
-    }
-
-    .schedule-img {
-      width: 100%;
-      max-width: 100%;
-      border-radius: 15px;
-      border: 2px solid var(--primary);
-      box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
-    }
-
-    .footer-note {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الطلاب - Creative Student</title>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="teacher-profile">
-      <!-- الصورة الشخصية المرفوعة -->
-      <img src="الصورة.jpg" alt="مستر محمد سمير" class="teacher-avatar">
-      <h1>منصة CREATIVE STUDENT</h1>
-      <p>مستر محمد سمير - رياضيات</p>
-      <a href="tel:01024417434" class="teacher-phone">
-        <i class="fa-solid fa-phone"></i> 01024417434
-      </a>
-    </div>
-
-    <div class="form-title">تسجيل بيانات الطالب</div>
-
+<div class="container">
+    <h2>استمارة تسجيل الطالب</h2>
     <form id="studentForm">
-      <div class="form-grid">
-        
         <div class="form-group">
-          <label>اسم الطالب رباعي *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" id="full_name" placeholder="اكتب اسم الطالب رباعي" required>
-          </div>
+            <label>اسم الطالب رباعي:</label>
+            <input type="text" id="full_name" required placeholder="أدخل اسمك الكامل">
         </div>
 
         <div class="form-group">
-          <label>رقم الهاتف (الطالب) *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-phone"></i>
-            <input type="tel" id="student_phone" placeholder="01xxxxxxxxx" required>
-          </div>
+            <label>رقم هاتف الطالب:</label>
+            <input type="tel" id="student_phone" required placeholder="01xxxxxxxxx">
         </div>
 
         <div class="form-group">
-          <label>رقم ولي الأمر *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-mobile-screen"></i>
-            <input type="tel" id="parent_phone" placeholder="01xxxxxxxxx" required>
-          </div>
+            <label>رقم هاتف ولي الأمر:</label>
+            <input type="tel" id="parent_phone" required placeholder="01xxxxxxxxx">
         </div>
 
         <div class="form-group">
-          <label>الصف الدراسي *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-graduation-cap"></i>
+            <label>الصف الدراسي:</label>
             <select id="grade" required>
-              <option value="">اختر الصف الدراسي</option>
-              <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-              <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-              <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-              <option value="الصف الأول الإعدادي بنين">الصف الأول الإعدادي بنين</option>
-              <option value="الصف الأول الإعدادي بنات">الصف الأول الإعدادي بنات</option>
-              <option value="الصف الثاني الإعدادي بنين">الصف الثاني الإعدادي بنين</option>
-              <option value="الصف الثاني الإعدادي بنات">الصف الثاني الإعدادي بنات</option>
-              <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                <option value="">اختر الصف الدراسي</option>
+                <option value="الأول الثانوي">الأول الثانوي</option>
+                <option value="الثاني الثانوي">الثاني الثانوي</option>
+                <option value="الثالث الثانوي">الثالث الثانوي</option>
             </select>
-          </div>
         </div>
 
         <div class="form-group">
-          <label>المجموعة *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-users"></i>
-            <select id="group_name" required>
-              <option value="">اختر المجموعة</option>
-              <option value="مجموعة 1 السبت والثلاثاء">مجموعة 1 السبت والثلاثاء</option>
-              <option value="مجموعة 2 الأحد والأربعاء">مجموعة 2 الأحد والأربعاء</option>
-            </select>
-          </div>
+            <label>اسم المجموعة:</label>
+            <input type="text" id="group_name" required placeholder="مثال: مجموعة A">
         </div>
 
         <div class="form-group">
-          <label>الفترة *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-clock"></i>
-            <select id="period" required>
-              <option value="">اختر الفترة</option>
-              <option value="صباحي">صباحي</option>
-              <option value="مسائي">مسائي</option>
-            </select>
-          </div>
+            <label>الموعد / الفترة:</label>
+            <input type="text" id="period" required placeholder="مثال: السبت والإثنين 4 عصراً">
         </div>
 
         <div class="form-group">
-          <label>المجموعة / المكان *</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-location-dot"></i>
-            <select id="city" required>
-              <option value="">اختر المكان</option>
-              <option value="مجموعة فوة">مجموعة فوة</option>
-              <option value="مجموعة العلوي">مجموعة العلوي</option>
-            </select>
-          </div>
+            <label>المدينة / المركز:</label>
+            <input type="text" id="city" required placeholder="أدخل مدينتك">
         </div>
 
         <div class="form-group">
-          <label>المدرسة</label>
-          <div class="input-wrapper">
-            <i class="fa-solid fa-school"></i>
-            <input type="text" id="school" placeholder="اكتب اسم المدرسة">
-          </div>
+            <label>المدرسة (اختياري):</label>
+            <input type="text" id="school" placeholder="أدخل اسم مدرستك">
         </div>
 
-        <div class="form-group full-width">
-          <label>ملاحظات (اختياري)</label>
-          <textarea id="notes" placeholder="اكتب أي ملاحظات إضافية"></textarea>
+        <div class="form-group">
+            <label>ملاحظات (اختياري):</label>
+            <textarea id="notes" rows="3" placeholder="أي ملاحظات إضافية"></textarea>
         </div>
 
-      </div>
-
-      <button type="submit" id="submitBtn" class="btn-submit">
-        <i class="fa-solid fa-paper-plane"></i> إرسال البيانات
-      </button>
-
-      <div id="alertBox" class="alert"></div>
+        <button type="submit" id="submitBtn">تسجيل البيانات</button>
     </form>
 
-    <!-- صورة المواعيد المرفوعة -->
-    <div id="scheduleContainer" class="schedule-container">
-      <h3>📅 جدول المواعيد الرسمي (2026 / 2027)</h3>
-      <img src="المواعيد.jpg" alt="جدول مواعيد دروس الرياضيات" class="schedule-img">
-    </div>
+    <div id="statusMessage" class="message"></div>
+</div>
 
-    <div class="footer-note">
-      <i class="fa-solid fa-lock"></i> بياناتك آمنة ولن يتم مشاركتها مع أي جهة أخرى
-    </div>
-  </div>
-
-  <script>
+<script>
+    // إعدادات الاتصال بـ Supabase
     const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
-    const SUPABASE_ANON_KEY = 'Sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('studentForm');
     const submitBtn = document.getElementById('submitBtn');
-    const alertBox = document.getElementById('alertBox');
-    const scheduleContainer = document.getElementById('scheduleContainer');
+    const statusMessage = document.getElementById('statusMessage');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...';
-      alertBox.style.display = 'none';
-
-      const formData = {
-        full_name: document.getElementById('full_name').value,
-        student_phone: document.getElementById('student_phone').value,
-        parent_phone: document.getElementById('parent_phone').value,
-        grade: document.getElementById('grade').value,
-        group_name: document.getElementById('group_name').value,
-        period: document.getElementById('period').value,
-        city: document.getElementById('city').value,
-        school: document.getElementById('school').value,
-        notes: document.getElementById('notes').value
-      };
-
-      try {
-        const { data, error } = await supabase
-          .from('students')
-          .insert([formData]);
-
-        if (error) throw error;
-
-        alertBox.className = 'alert alert-success';
-        alertBox.innerText = 'تم تسجيل البيانات بنجاح! يمكنك الاطلاع على جدول المواعيد بالأسفل:';
-        alertBox.style.display = 'block';
+        e.preventDefault();
         
-        scheduleContainer.style.display = 'block';
-        form.reset();
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'جاري الإرسال...';
+        statusMessage.style.display = 'none';
 
-        scheduleContainer.scrollIntoView({ behavior: 'smooth' });
+        const studentData = {
+            full_name: document.getElementById('full_name').value,
+            student_phone: document.getElementById('student_phone').value,
+            parent_phone: document.getElementById('parent_phone').value,
+            grade: document.getElementById('grade').value,
+            group_name: document.getElementById('group_name').value,
+            period: document.getElementById('period').value,
+            city: document.getElementById('city').value,
+            school: document.getElementById('school').value || null,
+            notes: document.getElementById('notes').value || null
+        };
 
-      } catch (err) {
-        alertBox.className = 'alert alert-error';
-        alertBox.innerText = 'حدث خطأ أثناء حفظ البيانات: ' + err.message;
-        alertBox.style.display = 'block';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال البيانات';
-      }
+        try {
+            const { data, error } = await supabaseClient
+                .from('students')
+                .insert([studentData]);
+
+            if (error) throw error;
+
+            statusMessage.className = 'message success';
+            statusMessage.innerText = 'تم تسجيل البيانات بنجاح! 🎉';
+            statusMessage.style.display = 'block';
+            form.reset();
+        } catch (error) {
+            console.error('Error:', error);
+            statusMessage.className = 'message error';
+            statusMessage.innerText = 'حدث خطأ أثناء التسجيل: ' + error.message;
+            statusMessage.style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'تسجيل البيانات';
+        }
     });
-  </script>
+</script>
+
 </body>
 </html>
