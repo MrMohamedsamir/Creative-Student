@@ -216,7 +216,6 @@
       border: 1px solid #f44336;
     }
 
-    /* قسم جدول المواعيد بعد التسجيل */
     .schedule-container {
       display: none;
       margin-top: 25px;
@@ -252,7 +251,8 @@
 
   <div class="container">
     <div class="teacher-profile">
-      <img src="https://i.postimg.cc/mD8NscWf/55760.png" alt="مستر محمد سمير" class="teacher-avatar">
+      <!-- الصورة الشخصية المرفوعة -->
+      <img src="الصورة.jpg" alt="مستر محمد سمير" class="teacher-avatar">
       <h1>منصة CREATIVE STUDENT</h1>
       <p>مستر محمد سمير - رياضيات</p>
       <a href="tel:01024417434" class="teacher-phone">
@@ -265,7 +265,6 @@
     <form id="studentForm">
       <div class="form-grid">
         
-        <!-- اسم الطالب -->
         <div class="form-group">
           <label>اسم الطالب رباعي *</label>
           <div class="input-wrapper">
@@ -274,7 +273,6 @@
           </div>
         </div>
 
-        <!-- رقم الهاتف -->
         <div class="form-group">
           <label>رقم الهاتف (الطالب) *</label>
           <div class="input-wrapper">
@@ -283,7 +281,6 @@
           </div>
         </div>
 
-        <!-- رقم ولي الأمر -->
         <div class="form-group">
           <label>رقم ولي الأمر *</label>
           <div class="input-wrapper">
@@ -292,7 +289,6 @@
           </div>
         </div>
 
-        <!-- الصف الدراسي -->
         <div class="form-group">
           <label>الصف الدراسي *</label>
           <div class="input-wrapper">
@@ -311,7 +307,6 @@
           </div>
         </div>
 
-        <!-- المجموعة -->
         <div class="form-group">
           <label>المجموعة *</label>
           <div class="input-wrapper">
@@ -324,7 +319,6 @@
           </div>
         </div>
 
-        <!-- الفترة -->
         <div class="form-group">
           <label>الفترة *</label>
           <div class="input-wrapper">
@@ -337,7 +331,6 @@
           </div>
         </div>
 
-        <!-- المنطقة / المدينة -->
         <div class="form-group">
           <label>المجموعة / المكان *</label>
           <div class="input-wrapper">
@@ -350,7 +343,6 @@
           </div>
         </div>
 
-        <!-- المدرسة -->
         <div class="form-group">
           <label>المدرسة</label>
           <div class="input-wrapper">
@@ -359,7 +351,6 @@
           </div>
         </div>
 
-        <!-- ملاحظات -->
         <div class="form-group full-width">
           <label>ملاحظات (اختياري)</label>
           <textarea id="notes" placeholder="اكتب أي ملاحظات إضافية"></textarea>
@@ -374,10 +365,10 @@
       <div id="alertBox" class="alert"></div>
     </form>
 
-    <!-- مكان ظهور صورة المواعيد بعد نجاح التسجيل -->
+    <!-- صورة المواعيد المرفوعة -->
     <div id="scheduleContainer" class="schedule-container">
       <h3>📅 جدول المواعيد الرسمي (2026 / 2027)</h3>
-      <img src="https://i.postimg.cc/qRHcKg3j/73621.png" alt="جدول مواعيد دروس الرياضيات" class="schedule-img">
+      <img src="المواعيد.jpg" alt="جدول مواعيد دروس الرياضيات" class="schedule-img">
     </div>
 
     <div class="footer-note">
@@ -386,7 +377,6 @@
   </div>
 
   <script>
-    // بيانات الربط الخاصة بمشروعك
     const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
 
@@ -427,11 +417,9 @@
         alertBox.innerText = 'تم تسجيل البيانات بنجاح! يمكنك الاطلاع على جدول المواعيد بالأسفل:';
         alertBox.style.display = 'block';
         
-        // إظهار صورة المواعيد وتفريغ الحقول
         scheduleContainer.style.display = 'block';
         form.reset();
 
-        // التمرير الناعم لأسفل لرؤية المواعيد
         scheduleContainer.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
