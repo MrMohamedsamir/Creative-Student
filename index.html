@@ -138,7 +138,7 @@
         <!-- اختيار المنطقة -->
         <div class="form-group">
             <label for="regionSelect">اختر المنطقة:</label>
-            <select id="regionSelect" required onchange="updateStages()">
+            <select id="regionSelect" required onchange="onRegionChange()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="fowwa">مدينة فوة</option>
                 <option value="al_alawi">منطقة العلوي</option>
@@ -148,7 +148,7 @@
         <!-- اختيار المرحلة الدراسية -->
         <div class="form-group hidden" id="stageGroup">
             <label for="stageSelect">المرحلة الدراسية:</label>
-            <select id="stageSelect" required onchange="updateGrades()">
+            <select id="stageSelect" required onchange="onStageChange()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="primary">المرحلة الابتدائية</option>
                 <option value="prep">المرحلة الإعدادية</option>
@@ -159,7 +159,7 @@
         <!-- اختيار الصف الدراسي -->
         <div class="form-group hidden" id="gradeGroup">
             <label for="gradeSelect">الصف الدراسي:</label>
-            <select id="gradeSelect" required onchange="updateGroups()">
+            <select id="gradeSelect" required onchange="onGradeChange()">
                 <option value="">-- اضغط للاختيار --</option>
             </select>
         </div>
@@ -246,7 +246,7 @@
         }
     };
 
-    function updateStages() {
+    function onRegionChange() {
         const region = document.getElementById('regionSelect').value;
         const stageGroup = document.getElementById('stageGroup');
         const secOption = document.getElementById('secOption');
@@ -254,6 +254,7 @@
         document.getElementById('gradeGroup').classList.add('hidden');
         document.getElementById('groupSelectionGroup').classList.add('hidden');
         document.getElementById('stageSelect').value = "";
+        document.getElementById('gradeSelect').innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
         if (region) {
             stageGroup.classList.remove('hidden');
@@ -267,7 +268,7 @@
         }
     }
 
-    function updateGrades() {
+    function onStageChange() {
         const region = document.getElementById('regionSelect').value;
         const stage = document.getElementById('stageSelect').value;
         const gradeSelect = document.getElementById('gradeSelect');
@@ -304,7 +305,7 @@
         }
     }
 
-    function updateGroups() {
+    function onGradeChange() {
         const region = document.getElementById('regionSelect').value;
         const stage = document.getElementById('stageSelect').value;
         const grade = document.getElementById('gradeSelect').value;
