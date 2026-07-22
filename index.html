@@ -172,7 +172,7 @@
             </select>
         </div>
 
-        <!-- اختيار المجموعة/الموعد (بالأيام والساعات الكاملة) -->
+        <!-- اختيار المجموعة/الموعد (بالأيام والساعات) -->
         <div class="form-group">
             <label for="groupSelect">المجموعة / الموعد المتاح:</label>
             <select id="groupSelect" required>
@@ -193,11 +193,12 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    // بيانات الربط الخاصة بمشروعك
+    const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // جدول المواعيد كاملة بالأيام والساعات الدقيقة
+    // قاعدة بيانات المواعيد بالأيام والساعات
     const scheduleDatabase = {
         fowwa: {
             p4: [
@@ -270,21 +271,26 @@
         const gradeText = document.getElementById('gradeSelect').options[document.getElementById('gradeSelect').selectedIndex].text;
         const selectedSchedule = document.getElementById('groupSelect').value;
 
+        // إدخال البيانات في جدول students بالضبط
         try {
-            await _supabase
-                .from('registrations')
+            const { error } = await _supabase
+                .from('students')
                 .insert([
                     { 
-                        student_name: name, 
+                        full_name: name, 
                         student_phone: sPhone, 
                         parent_phone: pPhone, 
-                        region: regionText, 
+                        city: regionText, 
                         grade: gradeText, 
-                        selected_schedule: selectedSchedule 
+                        group_name: selectedSchedule 
                     }
                 ]);
+
+            if (error) {
+                console.error("خطأ أثناء الحفظ:", error);
+            }
         } catch (err) {
-            console.log(err);
+            console.error("حدث خطأ غير متوقع:", err);
         }
 
         document.getElementById('registrationForm').style.display = 'none';
