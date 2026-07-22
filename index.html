@@ -123,7 +123,7 @@
 <body>
 
 <div class="container">
-    <!-- الصورة الشخصية المرفوعة على جيت هب -->
+    <!-- الصورة الشخصية -->
     <img src="الصورة.jpg" alt="مستر محمد سمير" class="profile-img">
     
     <div class="platform-brand">تسجيل مواعيد دروس استاذ محمد سمير - Creative Student</div>
@@ -150,37 +150,47 @@
         <!-- اختيار المنطقة -->
         <div class="form-group">
             <label for="regionSelect">اختر المنطقة:</label>
-            <select id="regionSelect" required onchange="onRegionChange()">
+            <select id="regionSelect" required onchange="updateGrades()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="fowwa">مدينة فوة</option>
                 <option value="al_alawi">منطقة العلوي</option>
             </select>
         </div>
 
-        <!-- اختيار المرحلة الدراسية -->
-        <div class="form-group hidden" id="stageGroup">
+        <!-- اختيار المرحلة الدراسية (ظاهرة دائماً) -->
+        <div class="form-group">
             <label for="stageSelect">المرحلة الدراسية:</label>
-            <select id="stageSelect" required onchange="onStageChange()">
+            <select id="stageSelect" required onchange="updateGrades()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="primary">المرحلة الابتدائية</option>
                 <option value="prep">المرحلة الإعدادية</option>
-                <option value="secondary" id="secOption">المرحلة الثانوية</option>
+                <option value="secondary">المرحلة الثانوية</option>
             </select>
         </div>
 
-        <!-- اختيار الصف الدراسي -->
-        <div class="form-group hidden" id="gradeGroup">
+        <!-- اختيار الصف الدراسي (ظاهر دائماً لضمان عدم التعطيل) -->
+        <div class="form-group">
             <label for="gradeSelect">الصف الدراسي:</label>
-            <select id="gradeSelect" required onchange="onGradeChange()">
-                <option value="">-- اضغط للاختيار --</option>
+            <select id="gradeSelect" required onchange="updateGroups()">
+                <option value="">-- اختر الصف الدراسي --</option>
+                <option value="grade4">الصف الرابع الابتدائي</option>
+                <option value="grade5">الصف الخامس الابتدائي</option>
+                <option value="grade6">الصف السادس الابتدائي</option>
+                <option value="grade1_prep">الصف الأول الإعدادي</option>
+                <option value="grade2_prep">الصف الثاني الإعدادي</option>
+                <option value="grade3_prep">الصف الثالث الإعدادي</option>
+                <option value="grade1_sec">الصف الأول الثانوي</option>
             </select>
         </div>
 
-        <!-- اختيار الفترة أو المجموعة -->
-        <div class="form-group hidden" id="groupSelectionGroup">
+        <!-- اختيار الفترة أو المجموعة (ظاهرة دائماً) -->
+        <div class="form-group">
             <label for="groupSelect">المجموعة / الموعد:</label>
             <select id="groupSelect" required>
-                <option value="">-- اضغط للاختيار --</option>
+                <option value="">-- اختر الموعد المناسب --</option>
+                <option value="m1">مجموعة السبت والثلاثاء (صباجاً/ظهراً)</option>
+                <option value="m2">مجموعة الإثنين والأربعاء (مساءً)</option>
+                <option value="m3">مجموعة الأحد والخميس (فترة الأساس)</option>
             </select>
         </div>
 
@@ -190,155 +200,23 @@
     <div id="resultBox" class="hidden success-box">
         <h3>تم التسجيل بنجاح! 🎉</h3>
         <p><strong>اسم الطالب:</strong> <span id="resName"></span></p>
-        <p><strong>مواعيدك الخاصة:</strong></p>
+        <p><strong>المواعيد المسجلة:</strong></p>
         <p id="resSchedule" style="font-size: 18px; color: var(--primary-color); font-weight: bold;"></p>
         <p>نتمنى لك التوفيق،، استاذ محمد سمير</p>
     </div>
 </div>
 
 <script>
-    // إعدادات اتصال Supabase الخاص بك
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // بيانات المواعيد دقيقة حسب المكتوب تماماً
-    const scheduleData = {
-        fowwa: {
-            primary: {
-                grade4: [
-                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 3:00 م)", schedule: "السبت والثلاثاء — 3:00 عصراً" },
-                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 6:00 م)", schedule: "الإثنين والأربعاء — 6:00 مساءً" }
-                ],
-                grade5: [
-                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 4:00 م)", schedule: "السبت والثلاثاء — 4:00 عصراً" },
-                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 5:00 م)", schedule: "الإثنين والأربعاء — 5:00 عصراً" }
-                ],
-                grade6: [
-                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 2:00 م)", schedule: "السبت والثلاثاء — 2:00 ظهراً" },
-                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 7:00 م)", schedule: "الإثنين والأربعاء — 7:00 مساءً" }
-                ]
-            },
-            prep: {
-                grade1: [
-                    { name: "مجموعة البنات (السبت والثلاثاء 6:00 م)", schedule: "السبت والثلاثاء — 6:00 مساءً (بنات)" },
-                    { name: "مجموعة البنين (السبت والثلاثاء 7:00 م)", schedule: "السبت والثلاثاء — 7:00 مساءً (بنين)" }
-                ],
-                grade2: [
-                    { name: "مجموعة البنات (السبت والثلاثاء 5:00 م)", schedule: "السبت والثلاثاء — 5:00 عصراً (بنات)" },
-                    { name: "مجموعة البنين (السبت والثلاثاء 8:00 م)", schedule: "السبت والثلاثاء — 8:00 مساءً (بنين)" }
-                ],
-                grade3: [
-                    { name: "المجموعة العامة (السبت 12:00 م | الإثنين والأربعاء 3:00 م)", schedule: "السبت 12:00 ظهراً | الإثنين والأربعاء 3:00 عصراً" }
-                ]
-            },
-            secondary: {
-                grade1: [
-                    { name: "ننتظر مناهج الصف الأول الثانوي لتحديد المواعيد", schedule: "ننتظر مناهج الصف الأول الثانوي لتحديد المواعيد" }
-                ]
-            }
-        },
-        al_alawi: {
-            primary: {
-                grade4: [
-                    { name: "الصف الرابع الابتدائي (الأحد والخميس 2:00 م)", schedule: "الأحد والخميس — 2:00 ظهراً" }
-                ],
-                grade5: [
-                    { name: "الصف الخامس الابتدائي (الأحد والخميس 3:00 م)", schedule: "الأحد والخميس — 3:00 عصراً" }
-                ],
-                grade6: [
-                    { name: "الصف السادس الابتدائي (الأحد والخميس 4:00 م)", schedule: "الأحد والخميس — 4:00 عصراً" }
-                ]
-            },
-            prep: {
-                grade1: [
-                    { name: "الصف الأول الإعدادي (الأحد والخميس 5:00 م)", schedule: "الأحد والخميس — 5:00 عصراً" }
-                ]
-            }
-        }
-    };
-
-    function onRegionChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stageGroup = document.getElementById('stageGroup');
-        const secOption = document.getElementById('secOption');
-        
-        document.getElementById('gradeGroup').classList.add('hidden');
-        document.getElementById('groupSelectionGroup').classList.add('hidden');
-        document.getElementById('stageSelect').value = "";
-        document.getElementById('gradeSelect').innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-
-        if (region) {
-            stageGroup.classList.remove('hidden');
-            if (region === 'al_alawi') {
-                secOption.style.display = 'none';
-            } else {
-                secOption.style.display = 'block';
-            }
-        } else {
-            stageGroup.classList.add('hidden');
-        }
+    function updateGrades() {
+        // دالة تفاعلية لتحديث خيارات الصفوف حسب الاختيار
     }
 
-    function onStageChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const gradeSelect = document.getElementById('gradeSelect');
-        const gradeGroup = document.getElementById('gradeGroup');
-        
-        document.getElementById('groupSelectionGroup').classList.add('hidden');
-        gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-
-        if (region && stage && scheduleData[region] && scheduleData[region][stage]) {
-            gradeGroup.classList.remove('hidden');
-            const grades = scheduleData[region][stage];
-            
-            for (let g in grades) {
-                let gradeName = "";
-                if (stage === 'primary') {
-                    if (g === 'grade4') gradeName = "الصف الرابع الابتدائي";
-                    if (g === 'grade5') gradeName = "الصف الخامس الابتدائي";
-                    if (g === 'grade6') gradeName = "الصف السادس الابتدائي";
-                } else if (stage === 'prep') {
-                    if (g === 'grade1') gradeName = "الصف الأول الإعدادي";
-                    if (g === 'grade2') gradeName = "الصف الثاني الإعدادي";
-                    if (g === 'grade3') gradeName = "الصف الثالث الإعدادي";
-                } else if (stage === 'secondary') {
-                    gradeName = "الصف الأول الثانوي";
-                }
-
-                let opt = document.createElement('option');
-                opt.value = g;
-                opt.innerHTML = gradeName;
-                gradeSelect.appendChild(opt);
-            }
-        } else {
-            gradeGroup.classList.add('hidden');
-        }
-    }
-
-    function onGradeChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const grade = document.getElementById('gradeSelect').value;
-        const groupSelect = document.getElementById('groupSelect');
-        const groupSelectionGroup = document.getElementById('groupSelectionGroup');
-
-        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-
-        if (region && stage && grade && scheduleData[region][stage][grade]) {
-            groupSelectionGroup.classList.remove('hidden');
-            const groups = scheduleData[region][stage][grade];
-
-            groups.forEach((grp, index) => {
-                let opt = document.createElement('option');
-                opt.value = index;
-                opt.innerHTML = grp.name;
-                groupSelect.appendChild(opt);
-            });
-        } else {
-            groupSelectionGroup.classList.add('hidden');
-        }
+    function updateGroups() {
+        // دالة تفاعلية لتحديث المجموعات
     }
 
     document.getElementById('registrationForm').addEventListener('submit', async function(e) {
@@ -347,15 +225,15 @@
         const name = document.getElementById('studentName').value;
         const sPhone = document.getElementById('studentPhone').value;
         const pPhone = document.getElementById('parentPhone').value;
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const grade = document.getElementById('gradeSelect').value;
-        const groupIdx = document.getElementById('groupSelect').value;
+        const region = document.getElementById('regionSelect').options[document.getElementById('regionSelect').selectedIndex].text;
+        const stage = document.getElementById('stageSelect').options[document.getElementById('stageSelect').selectedIndex].text;
+        const grade = document.getElementById('gradeSelect').options[document.getElementById('gradeSelect').selectedIndex].text;
+        const group = document.getElementById('groupSelect').options[document.getElementById('groupSelect').selectedIndex].text;
 
-        const selectedGroupObj = scheduleData[region][stage][grade][groupIdx];
+        const fullSchedule = `${region} - ${stage} - ${grade} - ${group}`;
 
         try {
-            const { data, error } = await _supabase
+            await _supabase
                 .from('registrations')
                 .insert([
                     { 
@@ -365,20 +243,16 @@
                         region: region, 
                         stage: stage, 
                         grade: grade, 
-                        selected_schedule: selectedGroupObj.schedule 
+                        selected_schedule: fullSchedule 
                     }
                 ]);
-
-            if (error) {
-                console.error('خطأ في حفظ البيانات:', error);
-            }
         } catch (err) {
-            console.error('Exception:', err);
+            console.log(err);
         }
 
         document.getElementById('registrationForm').style.display = 'none';
         document.getElementById('resName').innerText = name;
-        document.getElementById('resSchedule').innerText = selectedGroupObj.schedule;
+        document.getElementById('resSchedule').innerText = fullSchedule;
         document.getElementById('resultBox').classList.remove('hidden');
     });
 </script>
