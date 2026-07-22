@@ -3,378 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استمارة تسجيل الطلاب - أ/ محمد سمير</title>
-    <!-- Supabase SDK -->
+    <title>منصة مستر محمد سمير - تسجيل الحجوزات</title>
+    <!-- مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Font Awesome الأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- خط Cairo -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            padding: 0;
+        :root {
+            --primary-color: #00e5ff;
+            --bg-color: #0b1329;
+            --card-bg: #111a3a;
+            --text-color: #ffffff;
+            --border-color: #00e5ff55;
         }
-
         body {
-            background-color: #0b0f19;
-            background-image: radial-gradient(circle at 50% 0%, #111d2e 0%, #0b0f19 75%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
             padding: 20px;
-            color: #ffffff;
+            direction: rtl;
+            text-align: right;
         }
-
-        .card {
-            background: #111827;
-            width: 100%;
-            max-width: 520px;
-            border-radius: 20px;
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(6, 182, 212, 0.15);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .header {
-            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-            padding: 30px 20px 20px 20px;
-            text-align: center;
-            border-bottom: 2px solid #06b6d4;
-        }
-
-        .teacher-img {
-            width: 105px;
-            height: 105px;
-            border-radius: 50%;
-            border: 3px solid #06b6d4;
-            object-fit: cover;
-            margin-bottom: 12px;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-        }
-
-        .header h1 {
-            font-size: 25px;
-            font-weight: 900;
-            color: #06b6d4;
-            margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-        }
-
-        .header p {
-            font-size: 14px;
-            color: #9ca3af;
-            font-weight: 600;
-        }
-
-        .phone-contact {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px solid #06b6d4;
-            padding: 6px 18px;
-            border-radius: 50px;
-            margin-top: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            color: #06b6d4;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .phone-contact:hover {
-            background: #06b6d4;
-            color: #111827;
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
-        }
-
-        form {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
             padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
         }
-
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
-
         label {
             display: block;
-            font-weight: 700;
             margin-bottom: 8px;
-            color: #e5e7eb;
-            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary-color);
         }
-
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            background-color: #1f2937;
-            border: 1.5px solid #374151;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #ffffff;
-            transition: all 0.3s ease;
-            outline: none;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #0b1329;
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-
-        input::placeholder {
-            color: #6b7280;
-        }
-
         input:focus, select:focus {
-            border-color: #06b6d4;
-            background-color: #111827;
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
         }
-
-        select option {
-            background-color: #1f2937;
-            color: #ffffff;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            background: var(--primary-color);
+            color: #0b1329;
             border: none;
-            border-radius: 10px;
-            color: #0f172a;
+            border-radius: 8px;
             font-size: 18px;
-            font-weight: 900;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
-            transition: all 0.3s ease;
+            transition: 0.3s;
             margin-top: 10px;
         }
-
         button:hover {
-            background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
-            transform: translateY(-2px);
+            background: #00b8d4;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
         }
-
-        button:disabled {
-            background: #4b5563;
-            color: #9ca3af;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .alert {
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-align: center;
-            font-size: 14px;
+        .hidden {
             display: none;
         }
-
-        .alert-success {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-            border: 1px solid #10b981;
-        }
-
-        .alert-error {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid #ef4444;
-        }
-
-        #scheduleContainer {
-            display: none;
+        .success-box {
+            background: rgba(0, 229, 255, 0.1);
+            border: 2px solid var(--primary-color);
             padding: 20px;
-            text-align: center;
-            border-top: 1px solid #374151;
-            background: #0f172a;
-        }
-
-        #scheduleContainer h3 {
-            color: #06b6d4;
-            margin-bottom: 8px;
-        }
-
-        #scheduleContainer p {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-bottom: 12px;
-        }
-
-        #scheduleContainer img {
-            width: 100%;
             border-radius: 10px;
-            border: 2px solid #06b6d4;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            text-align: center;
+            margin-top: 20px;
         }
-
-        @media (max-width: 480px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
+        .success-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="header">
-        <!-- تم ضبط اسم الصورة هنا ليتطابق مع اسم "الصورة" على جيت هاب -->
-        <img src="الصورة.jpg" alt="أستاذ محمد سمير" class="teacher-img">
-        <h1>أ / محمد سمير</h1>
-        <p>منصة Creative Student التعليمية</p>
-        <a href="tel:01024417434" class="phone-contact">
-            <i class="fa-solid fa-phone"></i> 01024417434
-        </a>
-    </div>
-
-    <form id="studentForm">
-        <div id="alertBox" class="alert"></div>
+<div class="container">
+    <h2>تسجيل مواعيد الدروس - مستر محمد سمير</h2>
+    
+    <form id="registrationForm">
+        <!-- البيانات الأساسية -->
+        <div class="form-group">
+            <label for="studentName">اسم الطالب:</label>
+            <input type="text" id="studentName" required placeholder="أدخل اسم الطالب رباعي">
+        </div>
 
         <div class="form-group">
-            <label>اسم الطالب رباعي *</label>
-            <input type="text" id="full_name" required placeholder="أدخل اسم الطالب الكامل">
+            <label for="studentPhone">رقم موبايل الطالب:</label>
+            <input type="tel" id="studentPhone" required placeholder="01xxxxxxxx0">
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>رقم هاتف الطالب *</label>
-                <input type="tel" id="student_phone" required placeholder="01xxxxxxxxx">
-            </div>
-            <div class="form-group">
-                <label>رقم ولي الأمر *</label>
-                <input type="tel" id="parent_phone" required placeholder="01xxxxxxxxx">
-            </div>
+        <div class="form-group">
+            <label for="parentPhone">رقم موبايل ولي الأمر:</label>
+            <input type="tel" id="parentPhone" required placeholder="01xxxxxxxx0">
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>الصف الدراسي *</label>
-                <select id="grade" required>
-                    <option value="">اختر الصف الدراسي</option>
-                    <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
-                    <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
-                    <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
-                    <option value="الصف الأول الاعدادي بنين">الصف الأول الاعدادي بنين</option>
-                    <option value="الصف الأول الاعدادي بنات">الصف الأول الاعدادي بنات</option>
-                    <option value="الصف الثاني الاعدادي بنين">الصف الثاني الاعدادي بنين</option>
-                    <option value="الصف الثاني الاعدادي بنات">الصف الثاني الاعدادي بنات</option>
-                    <option value="الصف الثالث الاعدادي">الصف الثالث الاعدادي</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>اختر أيام المجموعة *</label>
-                <select id="group_name" required>
-                    <option value="">اختر أيام المجموعة</option>
-                    <option value="مجموعة 1 (السبت والثلاثاء)">مجموعة 1 (السبت والثلاثاء)</option>
-                    <option value="مجموعة 2 (الأحد والأربعاء)">مجموعة 2 (الأحد والأربعاء)</option>
-                    <option value="مجموعة 3 (الإثنين والخميس)">مجموعة 3 (الإثنين والخميس)</option>
-                </select>
-            </div>
+        <!-- اختيار المنطقة -->
+        <div class="form-group">
+            <label for="regionSelect">اختر المنطقة:</label>
+            <select id="regionSelect" required onchange="updateStages()">
+                <option value="">-- اضغط للاختيار --</option>
+                <option value="fowwa">مدينة فوة</option>
+                <option value="al_alawi">منطقة العلوي</option>
+            </select>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>الفترة الدراسية *</label>
-                <select id="period_type" required>
-                    <option value="">اختر الفترة</option>
-                    <option value="صباحي">صباحي</option>
-                    <option value="مسائي">مسائي</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>مقر المجموعة *</label>
-                <select id="location_group" required>
-                    <option value="">اختر المقر</option>
-                    <option value="مجموعة فوه">مجموعة فوه</option>
-                    <option value="مجموعة العلوي">مجموعة العلوي</option>
-                </select>
-            </div>
+        <!-- اختيار المرحلة الدراسية -->
+        <div class="form-group hidden" id="stageGroup">
+            <label for="stageSelect">المرحلة الدراسية:</label>
+            <select id="stageSelect" required onchange="updateGrades()">
+                <option value="">-- اضغط للاختيار --</option>
+                <option value="primary">المرحلة الابتدائية</option>
+                <option value="prep">المرحلة الإعدادية</option>
+                <option value="secondary" id="secOption">المرحلة الثانوية</option>
+            </select>
         </div>
 
-        <button type="submit" id="submitBtn">تأكيد وتسجيل البيانات 🚀</button>
+        <!-- اختيار الصف الدراسي -->
+        <div class="form-group hidden" id="gradeGroup">
+            <label for="gradeSelect">الصف الدراسي:</label>
+            <select id="gradeSelect" required onchange="updateGroups()">
+                <option value="">-- اضغط للاختيار --</option>
+            </select>
+        </div>
+
+        <!-- اختيار الفترة أو المجموعة -->
+        <div class="form-group hidden" id="groupSelectionGroup">
+            <label for="groupSelect">المجموعة / الموعد:</label>
+            <select id="groupSelect" required>
+                <option value="">-- اضغط للاختيار --</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn">تأكيد التسجيل</button>
     </form>
 
-    <div id="scheduleContainer">
-        <h3>🗓️ جدول المواعيد المتاحة</h3>
-        <p>يرجى حفظ صورة الجدول أو التقاط لقطة شاشة (Screenshot)</p>
-        <!-- تم ضبط اسم صورة الجدول هنا ليتطابق مع اسم "المواعيد" على جيت هاب -->
-        <img src="المواعيد.jpg" alt="جدول المواعيد">
+    <div id="resultBox" class="hidden success-box">
+        <h3>تم التسجيل بنجاح! 🎉</h3>
+        <p><strong>اسم الطالب:</strong> <span id="resName"></span></p>
+        <p><strong>مواعيدك الخاصة:</strong></p>
+        <p id="resSchedule" style="font-size: 18px; color: var(--primary-color); font-weight: bold;"></p>
+        <p>نتمنى لك التوفيق،، مستر محمد سمير</p>
     </div>
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://djpffvgmhjixpmakprhj.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_AltX7JCFt9aMi80RzLdd5g_YvhZ7cVl';
+    // إعدادات اتصال Supabase الخاص بك (ضع بياناتك هنا)
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // بيانات المواعيد دقيقة حسب المكتوب تماماً
+    const scheduleData = {
+        fowwa: {
+            primary: {
+                grade4: [
+                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 3:00 م)", schedule: "السبت والثلاثاء — 3:00 عصراً" },
+                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 6:00 م)", schedule: "الإثنين والأربعاء — 6:00 مساءً" }
+                ],
+                grade5: [
+                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 4:00 م)", schedule: "السبت والثلاثاء — 4:00 عصراً" },
+                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 5:00 م)", schedule: "الإثنين والأربعاء — 5:00 عصراً" }
+                ],
+                grade6: [
+                    { name: "المجموعة (1) - الفترة الصباحية (السبت والثلاثاء 2:00 م)", schedule: "السبت والثلاثاء — 2:00 ظهراً" },
+                    { name: "المجموعة (2) - الفترة المسائية (الإثنين والأربعاء 7:00 م)", schedule: "الإثنين والأربعاء — 7:00 مساءً" }
+                ]
+            },
+            prep: {
+                grade1: [
+                    { name: "مجموعة البنات (السبت والثلاثاء 6:00 م)", schedule: "السبت والثلاثاء — 6:00 مساءً (بنات)" },
+                    { name: "مجموعة البنين (السبت والثلاثاء 7:00 م)", schedule: "السبت والثلاثاء — 7:00 مساءً (بنين)" }
+                ],
+                grade2: [
+                    { name: "مجموعة البنات (السبت والثلاثاء 5:00 م)", schedule: "السبت والثلاثاء — 5:00 عصراً (بنات)" },
+                    { name: "مجموعة البنين (السبت والثلاثاء 8:00 م)", schedule: "السبت والثلاثاء — 8:00 مساءً (بنين)" }
+                ],
+                grade3: [
+                    { name: "المجموعة العامة (السبت 12:00 م | الإثنين والأربعاء 3:00 م)", schedule: "السبت 12:00 ظهراً | الإثنين والأربعاء 3:00 عصراً" }
+                ]
+            },
+            secondary: {
+                grade1: [
+                    { name: "ننتظر مناهج الصف الأول الثانوي لتحديد المواعيد", schedule: "ننتظر مناهج الصف الأول الثانوي لتحديد المواعيد" }
+                ]
+            }
+        },
+        al_alawi: {
+            primary: {
+                grade4: [
+                    { name: "الصف الرابع الابتدائي (الأحد والخميس 2:00 م)", schedule: "الأحد والخميس — 2:00 ظهراً" }
+                ],
+                grade5: [
+                    { name: "الصف الخامس الابتدائي (الأحد والخميس 3:00 م)", schedule: "الأحد والخميس — 3:00 عصراً" }
+                ],
+                grade6: [
+                    { name: "الصف السادس الابتدائي (الأحد والخميس 4:00 م)", schedule: "الأحد والخميس — 4:00 عصراً" }
+                ]
+            },
+            prep: {
+                grade1: [
+                    { name: "الصف الأول الإعدادي (الأحد والخميس 5:00 م)", schedule: "الأحد والخميس — 5:00 عصراً" }
+                ]
+            }
+        }
+    };
 
-    const form = document.getElementById('studentForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const alertBox = document.getElementById('alertBox');
-    const scheduleContainer = document.getElementById('scheduleContainer');
+    function updateStages() {
+        const region = document.getElementById('regionSelect').value;
+        const stageGroup = document.getElementById('stageGroup');
+        const secOption = document.getElementById('secOption');
+        
+        document.getElementById('gradeGroup').classList.add('hidden');
+        document.getElementById('groupSelectionGroup').classList.add('hidden');
 
-    form.addEventListener('submit', async (e) => {
+        if (region) {
+            stageGroup.classList.remove('hidden');
+            if (region === 'al_alawi') {
+                secOption.style.display = 'none'; // العلوي ليس به ثانوي في اللوحة
+            } else {
+                secOption.style.display = 'block';
+            }
+        } else {
+            stageGroup.classList.add('hidden');
+        }
+    }
+
+    function updateGrades() {
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const gradeSelect = document.getElementById('gradeSelect');
+        const gradeGroup = document.getElementById('gradeGroup');
+        
+        document.getElementById('groupSelectionGroup').classList.add('hidden');
+        gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+
+        if (stage && scheduleData[region][stage]) {
+            gradeGroup.classList.remove('hidden');
+            const grades = scheduleData[region][stage];
+            
+            for (let g in grades) {
+                let gradeName = "";
+                if(g === 'grade4') gradeName = "الصف الرابع الابتدائي";
+                if(g === 'grade5') gradeName = "الصف الخامس الابتدائي";
+                if(g === 'grade6') gradeName = "الصف السادس الابتدائي";
+                if(g === 'grade1') gradeName = (stage === 'primary') ? "الصف الرابع الابتدائي" : (stage === 'prep' ? "الصف الأول الإعدادي" : "الصف الأول الثانوي");
+                if(g === 'grade2') gradeName = "الصف الثاني الإعدادي";
+                if(g === 'grade3') gradeName = "الصف الثالث الإعدادي";
+
+                // تصحيح التسميات حسب المرحلة
+                if(stage === 'primary') {
+                    if(g === 'grade4') gradeName = "الصف الرابع الابتدائي";
+                    if(g === 'grade5') gradeName = "الصف الخامس الابتدائي";
+                    if(g === 'grade6') gradeName = "الصف السادس الابتدائي";
+                } else if(stage === 'prep') {
+                    if(g === 'grade1') gradeName = "الصف الأول الإعدادي";
+                    if(g === 'grade2') gradeName = "الصف الثاني الإعدادي";
+                    if(g === 'grade3') gradeName = "الصف الثالث الإعدادي";
+                } else if(stage === 'secondary') {
+                    gradeName = "الصف الأول الثانوي";
+                }
+
+                let opt = document.createElement('option');
+                opt.value = g;
+                opt.innerHTML = gradeName;
+                gradeSelect.appendChild(opt);
+            }
+        } else {
+            gradeGroup.classList.add('hidden');
+        }
+    }
+
+    function updateGroups() {
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const grade = document.getElementById('gradeSelect').value;
+        const groupSelect = document.getElementById('groupSelect');
+        const groupSelectionGroup = document.getElementById('groupSelectionGroup');
+
+        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+
+        if (grade && scheduleData[region][stage][grade]) {
+            groupSelectionGroup.classList.remove('hidden');
+            const groups = scheduleData[region][stage][grade];
+
+            groups.forEach((grp, index) => {
+                let opt = document.createElement('option');
+                opt.value = index;
+                opt.innerHTML = grp.name;
+                groupSelect.appendChild(opt);
+            });
+        } else {
+            groupSelectionGroup.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'جاري التسجيل وإرسال البيانات...';
-        alertBox.style.display = 'none';
+        const name = document.getElementById('studentName').value;
+        const sPhone = document.getElementById('studentPhone').value;
+        const pPhone = document.getElementById('parentPhone').value;
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const grade = document.getElementById('gradeSelect').value;
+        const groupIdx = document.getElementById('groupSelect').value;
 
-        const period = document.getElementById('period_type').value;
-        const location = document.getElementById('location_group').value;
+        const selectedGroupObj = scheduleData[region][stage][grade][groupIdx];
 
-        const studentData = {
-            full_name: document.getElementById('full_name').value.trim(),
-            student_phone: document.getElementById('student_phone').value.trim(),
-            parent_phone: document.getElementById('parent_phone').value.trim(),
-            grade: document.getElementById('grade').value,
-            group_name: document.getElementById('group_name').value,
-            notes: `المقر: ${location} | الفترة: ${period}`
-        };
-
+        // الحفظ في سوبا بيس (استبدل 'registrations' باسم الجدول الفعلي لديك إذا اختلف)
         try {
-            const { data, error } = await supabaseClient
-                .from('students')
-                .insert([studentData]);
+            const { data, error } = await _supabase
+                .from('registrations')
+                .insert([
+                    { 
+                        student_name: name, 
+                        student_phone: sPhone, 
+                        parent_phone: pPhone, 
+                        region: region, 
+                        stage: stage, 
+                        grade: grade, 
+                        selected_schedule: selectedGroupObj.schedule 
+                    }
+                ]);
 
-            if (error) throw error;
-
-            showAlert('تم تسجيل البيانات بنجاح! 🎉 نتمنى لك التوفيق.', 'success');
-            form.reset();
-            
-            scheduleContainer.style.display = 'block';
-            scheduleContainer.scrollIntoView({ behavior: 'smooth' });
-
-        } catch (error) {
-            console.error('Error:', error);
-            showAlert('حدث خطأ أثناء التسجيل: ' + (error.message || 'يرجى إعادة المحاولة'), 'error');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'تأكيد وتسجيل البيانات 🚀';
+            if (error) {
+                console.error('خطأ في حفظ البيانات:', error);
+            }
+        } catch (err) {
+            console.error('Exception:', err);
         }
-    });
 
-    function showAlert(message, type) {
-        alertBox.innerText = message;
-        alertBox.className = 'alert alert-' + type;
-        alertBox.style.display = 'block';
-    }
+        // إخفاء النموذج وإظهار موعد الطالب المخصص فقط
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('resName').innerText = name;
+        document.getElementById('resSchedule').innerText = selectedGroupObj.schedule;
+        document.getElementById('resultBox').classList.remove('hidden');
+    });
 </script>
 
 </body>
