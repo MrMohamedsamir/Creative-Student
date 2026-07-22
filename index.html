@@ -150,7 +150,7 @@
         <!-- اختيار المنطقة -->
         <div class="form-group">
             <label for="regionSelect">اختر المنطقة:</label>
-            <select id="regionSelect" required>
+            <select id="regionSelect" required onchange="onRegionChange()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="fowwa">مدينة فوة</option>
                 <option value="al_alawi">منطقة العلوي</option>
@@ -160,7 +160,7 @@
         <!-- اختيار المرحلة الدراسية -->
         <div class="form-group hidden" id="stageGroup">
             <label for="stageSelect">المرحلة الدراسية:</label>
-            <select id="stageSelect" required>
+            <select id="stageSelect" required onchange="onStageChange()">
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="primary">المرحلة الابتدائية</option>
                 <option value="prep">المرحلة الإعدادية</option>
@@ -171,7 +171,7 @@
         <!-- اختيار الصف الدراسي -->
         <div class="form-group hidden" id="gradeGroup">
             <label for="gradeSelect">الصف الدراسي:</label>
-            <select id="gradeSelect" required>
+            <select id="gradeSelect" required onchange="onGradeChange()">
                 <option value="">-- اضغط للاختيار --</option>
             </select>
         </div>
@@ -258,23 +258,15 @@
         }
     };
 
-    const regionSelect = document.getElementById('regionSelect');
-    const stageSelect = document.getElementById('stageSelect');
-    const gradeSelect = document.getElementById('gradeSelect');
-    const groupSelect = document.getElementById('groupSelect');
-
-    const stageGroup = document.getElementById('stageGroup');
-    const gradeGroup = document.getElementById('gradeGroup');
-    const groupSelectionGroup = document.getElementById('groupSelectionGroup');
-    const secOption = document.getElementById('secOption');
-
-    regionSelect.addEventListener('change', function() {
-        const region = this.value;
-        stageSelect.value = "";
-        gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-        gradeGroup.classList.add('hidden');
-        groupSelectionGroup.classList.add('hidden');
+    function onRegionChange() {
+        const region = document.getElementById('regionSelect').value;
+        const stageGroup = document.getElementById('stageGroup');
+        const secOption = document.getElementById('secOption');
+        
+        document.getElementById('gradeGroup').classList.add('hidden');
+        document.getElementById('groupSelectionGroup').classList.add('hidden');
+        document.getElementById('stageSelect').value = "";
+        document.getElementById('gradeSelect').innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
         if (region) {
             stageGroup.classList.remove('hidden');
@@ -286,14 +278,16 @@
         } else {
             stageGroup.classList.add('hidden');
         }
-    });
+    }
 
-    stageSelect.addEventListener('change', function() {
-        const region = regionSelect.value;
-        const stage = this.value;
+    function onStageChange() {
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const gradeSelect = document.getElementById('gradeSelect');
+        const gradeGroup = document.getElementById('gradeGroup');
+        
+        document.getElementById('groupSelectionGroup').classList.add('hidden');
         gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
-        groupSelectionGroup.classList.add('hidden');
 
         if (region && stage && scheduleData[region] && scheduleData[region][stage]) {
             gradeGroup.classList.remove('hidden');
@@ -321,12 +315,15 @@
         } else {
             gradeGroup.classList.add('hidden');
         }
-    });
+    }
 
-    gradeSelect.addEventListener('change', function() {
-        const region = regionSelect.value;
-        const stage = stageSelect.value;
-        const grade = this.value;
+    function onGradeChange() {
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const grade = document.getElementById('gradeSelect').value;
+        const groupSelect = document.getElementById('groupSelect');
+        const groupSelectionGroup = document.getElementById('groupSelectionGroup');
+
         groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
         if (region && stage && grade && scheduleData[region][stage][grade]) {
@@ -342,7 +339,7 @@
         } else {
             groupSelectionGroup.classList.add('hidden');
         }
-    });
+    }
 
     document.getElementById('registrationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -350,10 +347,10 @@
         const name = document.getElementById('studentName').value;
         const sPhone = document.getElementById('studentPhone').value;
         const pPhone = document.getElementById('parentPhone').value;
-        const region = regionSelect.value;
-        const stage = stageSelect.value;
-        const grade = gradeSelect.value;
-        const groupIdx = groupSelect.value;
+        const region = document.getElementById('regionSelect').value;
+        const stage = document.getElementById('stageSelect').value;
+        const grade = document.getElementById('gradeSelect').value;
+        const groupIdx = document.getElementById('groupSelect').value;
 
         const selectedGroupObj = scheduleData[region][stage][grade][groupIdx];
 
