@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة مستر محمد سمير - تسجيل الحجوزات</title>
+    <title>Creative Student - تسجيل مواعيد دروس استاذ محمد سمير</title>
     <!-- مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -35,7 +35,23 @@
         h2 {
             text-align: center;
             color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .platform-brand {
+            text-align: center;
+            font-size: 19px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .contact-number {
+            text-align: center;
+            font-size: 18px;
+            color: var(--primary-color);
             margin-bottom: 25px;
+            direction: ltr;
+            font-weight: bold;
         }
         .form-group {
             margin-bottom: 20px;
@@ -98,7 +114,9 @@
 <body>
 
 <div class="container">
-    <h2>تسجيل مواعيد الدروس - مستر محمد سمير</h2>
+    <div class="platform-brand">تسجيل مواعيد دروس استاذ محمد سمير - Creative Student</div>
+    <div class="contact-number">📞 01024417434</div>
+    <h2>اختر بياناتك بعناية للتسجيل</h2>
     
     <form id="registrationForm">
         <!-- البيانات الأساسية -->
@@ -162,12 +180,12 @@
         <p><strong>اسم الطالب:</strong> <span id="resName"></span></p>
         <p><strong>مواعيدك الخاصة:</strong></p>
         <p id="resSchedule" style="font-size: 18px; color: var(--primary-color); font-weight: bold;"></p>
-        <p>نتمنى لك التوفيق،، مستر محمد سمير</p>
+        <p>نتمنى لك التوفيق،، استاذ محمد سمير</p>
     </div>
 </div>
 
 <script>
-    // إعدادات اتصال Supabase الخاص بك (ضع بياناتك هنا)
+    // إعدادات اتصال Supabase الخاص بك
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -235,11 +253,12 @@
         
         document.getElementById('gradeGroup').classList.add('hidden');
         document.getElementById('groupSelectionGroup').classList.add('hidden');
+        document.getElementById('stageSelect').value = "";
 
         if (region) {
             stageGroup.classList.remove('hidden');
             if (region === 'al_alawi') {
-                secOption.style.display = 'none'; // العلوي ليس به ثانوي في اللوحة
+                secOption.style.display = 'none';
             } else {
                 secOption.style.display = 'block';
             }
@@ -257,29 +276,21 @@
         document.getElementById('groupSelectionGroup').classList.add('hidden');
         gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
-        if (stage && scheduleData[region][stage]) {
+        if (region && stage && scheduleData[region] && scheduleData[region][stage]) {
             gradeGroup.classList.remove('hidden');
             const grades = scheduleData[region][stage];
             
             for (let g in grades) {
                 let gradeName = "";
-                if(g === 'grade4') gradeName = "الصف الرابع الابتدائي";
-                if(g === 'grade5') gradeName = "الصف الخامس الابتدائي";
-                if(g === 'grade6') gradeName = "الصف السادس الابتدائي";
-                if(g === 'grade1') gradeName = (stage === 'primary') ? "الصف الرابع الابتدائي" : (stage === 'prep' ? "الصف الأول الإعدادي" : "الصف الأول الثانوي");
-                if(g === 'grade2') gradeName = "الصف الثاني الإعدادي";
-                if(g === 'grade3') gradeName = "الصف الثالث الإعدادي";
-
-                // تصحيح التسميات حسب المرحلة
-                if(stage === 'primary') {
-                    if(g === 'grade4') gradeName = "الصف الرابع الابتدائي";
-                    if(g === 'grade5') gradeName = "الصف الخامس الابتدائي";
-                    if(g === 'grade6') gradeName = "الصف السادس الابتدائي";
-                } else if(stage === 'prep') {
-                    if(g === 'grade1') gradeName = "الصف الأول الإعدادي";
-                    if(g === 'grade2') gradeName = "الصف الثاني الإعدادي";
-                    if(g === 'grade3') gradeName = "الصف الثالث الإعدادي";
-                } else if(stage === 'secondary') {
+                if (stage === 'primary') {
+                    if (g === 'grade4') gradeName = "الصف الرابع الابتدائي";
+                    if (g === 'grade5') gradeName = "الصف الخامس الابتدائي";
+                    if (g === 'grade6') gradeName = "الصف السادس الابتدائي";
+                } else if (stage === 'prep') {
+                    if (g === 'grade1') gradeName = "الصف الأول الإعدادي";
+                    if (g === 'grade2') gradeName = "الصف الثاني الإعدادي";
+                    if (g === 'grade3') gradeName = "الصف الثالث الإعدادي";
+                } else if (stage === 'secondary') {
                     gradeName = "الصف الأول الثانوي";
                 }
 
@@ -302,7 +313,7 @@
 
         groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
-        if (grade && scheduleData[region][stage][grade]) {
+        if (region && stage && grade && scheduleData[region][stage][grade]) {
             groupSelectionGroup.classList.remove('hidden');
             const groups = scheduleData[region][stage][grade];
 
@@ -330,7 +341,6 @@
 
         const selectedGroupObj = scheduleData[region][stage][grade][groupIdx];
 
-        // الحفظ في سوبا بيس (استبدل 'registrations' باسم الجدول الفعلي لديك إذا اختلف)
         try {
             const { data, error } = await _supabase
                 .from('registrations')
@@ -353,7 +363,6 @@
             console.error('Exception:', err);
         }
 
-        // إخفاء النموذج وإظهار موعد الطالب المخصص فقط
         document.getElementById('registrationForm').style.display = 'none';
         document.getElementById('resName').innerText = name;
         document.getElementById('resSchedule').innerText = selectedGroupObj.schedule;
