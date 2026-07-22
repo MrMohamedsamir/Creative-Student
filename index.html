@@ -31,22 +31,29 @@
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            text-align: center;
+        }
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            margin-bottom: 15px;
         }
         h2 {
-            text-align: center;
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 20px;
         }
         .platform-brand {
-            text-align: center;
             font-size: 19px;
             font-weight: bold;
             color: #fff;
             margin-bottom: 8px;
         }
         .contact-number {
-            text-align: center;
             font-size: 18px;
             color: var(--primary-color);
             margin-bottom: 25px;
@@ -55,6 +62,7 @@
         }
         .form-group {
             margin-bottom: 20px;
+            text-align: right;
         }
         label {
             display: block;
@@ -71,6 +79,7 @@
             color: #fff;
             font-size: 16px;
             box-sizing: border-box;
+            text-align: right;
         }
         input:focus, select:focus {
             outline: none;
@@ -95,7 +104,7 @@
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
         }
         .hidden {
-            display: none;
+            display: none !important;
         }
         .success-box {
             background: rgba(0, 229, 255, 0.1);
@@ -114,6 +123,9 @@
 <body>
 
 <div class="container">
+    <!-- الصورة الشخصية المرفوعة على جيت هب -->
+    <img src="الصورة.jpg" alt="مستر محمد سمير" class="profile-img">
+    
     <div class="platform-brand">تسجيل مواعيد دروس استاذ محمد سمير - Creative Student</div>
     <div class="contact-number">📞 01024417434</div>
     <h2>اختر بياناتك بعناية للتسجيل</h2>
@@ -138,7 +150,7 @@
         <!-- اختيار المنطقة -->
         <div class="form-group">
             <label for="regionSelect">اختر المنطقة:</label>
-            <select id="regionSelect" required onchange="onRegionChange()">
+            <select id="regionSelect" required>
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="fowwa">مدينة فوة</option>
                 <option value="al_alawi">منطقة العلوي</option>
@@ -148,7 +160,7 @@
         <!-- اختيار المرحلة الدراسية -->
         <div class="form-group hidden" id="stageGroup">
             <label for="stageSelect">المرحلة الدراسية:</label>
-            <select id="stageSelect" required onchange="onStageChange()">
+            <select id="stageSelect" required>
                 <option value="">-- اضغط للاختيار --</option>
                 <option value="primary">المرحلة الابتدائية</option>
                 <option value="prep">المرحلة الإعدادية</option>
@@ -159,7 +171,7 @@
         <!-- اختيار الصف الدراسي -->
         <div class="form-group hidden" id="gradeGroup">
             <label for="gradeSelect">الصف الدراسي:</label>
-            <select id="gradeSelect" required onchange="onGradeChange()">
+            <select id="gradeSelect" required>
                 <option value="">-- اضغط للاختيار --</option>
             </select>
         </div>
@@ -246,15 +258,23 @@
         }
     };
 
-    function onRegionChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stageGroup = document.getElementById('stageGroup');
-        const secOption = document.getElementById('secOption');
-        
-        document.getElementById('gradeGroup').classList.add('hidden');
-        document.getElementById('groupSelectionGroup').classList.add('hidden');
-        document.getElementById('stageSelect').value = "";
-        document.getElementById('gradeSelect').innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+    const regionSelect = document.getElementById('regionSelect');
+    const stageSelect = document.getElementById('stageSelect');
+    const gradeSelect = document.getElementById('gradeSelect');
+    const groupSelect = document.getElementById('groupSelect');
+
+    const stageGroup = document.getElementById('stageGroup');
+    const gradeGroup = document.getElementById('gradeGroup');
+    const groupSelectionGroup = document.getElementById('groupSelectionGroup');
+    const secOption = document.getElementById('secOption');
+
+    regionSelect.addEventListener('change', function() {
+        const region = this.value;
+        stageSelect.value = "";
+        gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+        gradeGroup.classList.add('hidden');
+        groupSelectionGroup.classList.add('hidden');
 
         if (region) {
             stageGroup.classList.remove('hidden');
@@ -266,16 +286,14 @@
         } else {
             stageGroup.classList.add('hidden');
         }
-    }
+    });
 
-    function onStageChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const gradeSelect = document.getElementById('gradeSelect');
-        const gradeGroup = document.getElementById('gradeGroup');
-        
-        document.getElementById('groupSelectionGroup').classList.add('hidden');
+    stageSelect.addEventListener('change', function() {
+        const region = regionSelect.value;
+        const stage = this.value;
         gradeSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+        groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+        groupSelectionGroup.classList.add('hidden');
 
         if (region && stage && scheduleData[region] && scheduleData[region][stage]) {
             gradeGroup.classList.remove('hidden');
@@ -303,15 +321,12 @@
         } else {
             gradeGroup.classList.add('hidden');
         }
-    }
+    });
 
-    function onGradeChange() {
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const grade = document.getElementById('gradeSelect').value;
-        const groupSelect = document.getElementById('groupSelect');
-        const groupSelectionGroup = document.getElementById('groupSelectionGroup');
-
+    gradeSelect.addEventListener('change', function() {
+        const region = regionSelect.value;
+        const stage = stageSelect.value;
+        const grade = this.value;
         groupSelect.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
 
         if (region && stage && grade && scheduleData[region][stage][grade]) {
@@ -327,7 +342,7 @@
         } else {
             groupSelectionGroup.classList.add('hidden');
         }
-    }
+    });
 
     document.getElementById('registrationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -335,10 +350,10 @@
         const name = document.getElementById('studentName').value;
         const sPhone = document.getElementById('studentPhone').value;
         const pPhone = document.getElementById('parentPhone').value;
-        const region = document.getElementById('regionSelect').value;
-        const stage = document.getElementById('stageSelect').value;
-        const grade = document.getElementById('gradeSelect').value;
-        const groupIdx = document.getElementById('groupSelect').value;
+        const region = regionSelect.value;
+        const stage = stageSelect.value;
+        const grade = gradeSelect.value;
+        const groupIdx = groupSelect.value;
 
         const selectedGroupObj = scheduleData[region][stage][grade][groupIdx];
 
